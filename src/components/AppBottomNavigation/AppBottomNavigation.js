@@ -19,7 +19,7 @@ class AppBottomNavigation extends Component {
   render() {
 
     const stylesheet = {
-      "position": "absolute",
+      "position": "fixed",
       "width": "100%",
       "bottom": 0,
     }

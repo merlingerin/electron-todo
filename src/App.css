@@ -1,5 +1,25 @@
+.flex-row {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+}
+
 .layer {
   height: 100vh;
   position: relative;
   text-align: center;
+  padding-bottom: 150px;
+  letter-spacing: 1px;
+}
+
+.todo__input-container {
+  padding: 36px 16px 16px 16px;
+}
+
+.todo__list {
+  text-align: left;
+  max-width: 720px;
+  min-width: 320px;
+  margin: auto;
 }
