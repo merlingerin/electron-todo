@@ -17,9 +17,13 @@
   padding: 36px 16px 16px 16px;
 }
 
-.todo__list {
+.todo__container {
   text-align: left;
   max-width: 720px;
   min-width: 320px;
   margin: auto;
+}
+
+.todo__item.completed {
+  background-color: #f7f7f7!important;
 }

@@ -7,12 +7,14 @@ import TodoItem from '../TodoItem/TodoItem';
 const TodoList = (props) => {
     console.log('PROPS', props);
     return (
-        <div className="todo__list">
+        <div className="todo__container">
             <TodoInput />
-            <List>
+            <List className="todo__list">
                 { props.todos.length > 0 ? 
                     props.todos.map((item) => (
-                        <TodoItem key={item.id} {...item} />
+                        <TodoItem 
+                            key={item.id} {...item} 
+                        />
                     ))  :
                     'No Todos.'
                 }

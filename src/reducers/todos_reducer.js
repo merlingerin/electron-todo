@@ -2,9 +2,16 @@ let initialState = [{
     id: 0,
     title: 'Learn JavaScript',
     description: 'JS, ES6, React, Redux, ReactNative',
-    spendTime: 0,
+    spendTime: 123,
     active: false,
     completed: false
+},{
+    id: 1,
+    title: 'Learn Node js',
+    description: 'ExpressJS MeteorJS',
+    spendTime: 59000,
+    active: false,
+    completed: true
 }];
 
 const todos = (state = initialState || [], action) => {

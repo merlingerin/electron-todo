@@ -22,12 +22,15 @@ class TodoInput extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: this.props.todos.length,
-            title: '',
-            description: '',
-            spendTime: 0,
-            active: false,
-            completed: false
+            todo: {
+                id: this.props.todos.length,
+                title: '',
+                description: '',
+                spendTime: 0,
+                active: false,
+                completed: false
+            },
+            errorText: false
         }
         this._handleToggle = this._handleToggle.bind(this);
         this._handleInput = this._handleInput.bind(this);
@@ -35,16 +38,31 @@ class TodoInput extends React.Component {
     }
 
     _handleInput(e) {
-        this.setState({[e.target.name]: e.target.value});
+        let target = e.target;
+        this.setState((prevState) => {
+            return {
+                todo: {...prevState.todo,[target.name]: target.value},
+                errorText: false
+            }
+        });
     }
 
     _handleToggle(state) {
-        this.setState({completed: state});
+        this.setState((prevState) => {
+            return {todo:{...prevState.todo, completed: state}}
+        });
     }
 
     _handleSubmit() {
-        this.props.onTodoAdd(this.state);
-        this.setState({title: '', description: ''});
+        if(this.state.todo.title !== '' && this.state.todo.description !== '') {
+            this.props.onTodoAdd(this.state.todo);
+            this.setState((prevState) => {
+                return {todo: {...prevState.todo, title: '', description: ''}}
+            });
+        } else {
+            this.setState({errorText: true});
+        }
+
     }
 
     render() {
@@ -55,6 +73,7 @@ class TodoInput extends React.Component {
                     hintText="Title of Todo"
                     defaultValue={this.state.title}
                     onChange={this._handleInput}
+                    errorText={this.state.errorText ? 'This field is required' : ''}
                 /><br />
                 <br />
                 <TextField style={style.input}
@@ -62,6 +81,7 @@ class TodoInput extends React.Component {
                     hintText="Short description of todo..."
                     defaultValue={this.state.description}
                     onChange={this._handleInput}
+                    errorText={this.state.errorText ? 'This field is required' : ''}                    
                     multiLine={true}
                     rows={1}
                     rowsMax={2}

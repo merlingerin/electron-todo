@@ -5,7 +5,11 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import PlayCircleFilled from 'material-ui/svg-icons/av/play-circle-filled';
+import PauseCircleFilled from 'material-ui/svg-icons/av/pause-circle-filled';
+import Timer from '../Timer/Timer';
 
+<i class="material-icons">play_circle_filled</i>
 const iconButtonElement = (
     <IconButton
         touch={true}
@@ -18,22 +22,22 @@ const iconButtonElement = (
   
 const rightIconMenu = (
     <IconMenu iconButtonElement={iconButtonElement}>
-        <MenuItem>Reply</MenuItem>
-        <MenuItem>Forward</MenuItem>
+        <MenuItem>Start</MenuItem>
+        <MenuItem>Stop</MenuItem>
         <MenuItem>Delete</MenuItem>
     </IconMenu>
 );
 
 const TodoItem = (props) => {
-    console.log('props', props)
+    let completed =  props.completed ? 'completed' : '';
     return (
         <ListItem
-            // leftAvatar={<Avatar src="images/ok-128.jpg" />}
+            className={`todo__item ${completed}`}
+            leftAvatar={<Timer {...props} />}
             rightIconButton={rightIconMenu}
             primaryText={props.title}
             secondaryText={
                 <p>
-                    <hr style={{color: lightBlack}} />
                     {props.description}
                 </p>
             }
