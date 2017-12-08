@@ -1,11 +1,13 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import {toggleTodo} from '../../actions/index';
+
 import {List} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import TodoInput from '../TodoInput/TodoInput';
 import TodoItem from '../TodoItem/TodoItem';
 
 const TodoList = (props) => {
-    console.log('PROPS', props);
     return (
         <div className="todo__container">
             <TodoInput />
@@ -15,7 +17,8 @@ const TodoList = (props) => {
                         <TodoItem 
                             key={item.id} 
                             {...item}
-                            {...props.onTimerActivated}
+                            timerActived={props.appState.timerActived}
+                            onToggleTodo={props.onToggleTodo}
                         />
                     ))  :
                     'No Todos.'
@@ -25,4 +28,14 @@ const TodoList = (props) => {
     );
 }
 
-export default TodoList;
+const mapStateToProps = (state) => ({});
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onToggleTodo: (id) => {
+            dispatch(toggleTodo(id));
+        }
+    }
+  }
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoList);

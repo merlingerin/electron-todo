@@ -1,4 +1,7 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {filter} from '../../actions/index';
+
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import Paper from 'material-ui/Paper';
 import History from 'material-ui/svg-icons/action/history';
@@ -30,17 +33,29 @@ class AppBottomNavigation extends Component {
           <BottomNavigationItem
             label="Recents"
             icon={playlistAdd}
-            onClick={() => this.select(0)}
+            onClick={() => {
+                this.select(0);
+                this.props.filter('FILTER_ALL');
+              }
+            }
           />
           <BottomNavigationItem
             label="Favorites"
             icon={playlistCheck}
-            onClick={() => this.select(1)}
+            onClick={() => {
+                this.select(1);
+                this.props.filter('FILTER_COMPLETED');
+              }
+            }
           />
           <BottomNavigationItem
             label="Nearby"
             icon={history}
-            onClick={() => this.select(2)}
+              onClick={() => {
+                this.select(2);
+                this.props.filter('FILTER_ACTIVE');
+              }
+            }
           />
         </BottomNavigation>
       </Paper>
@@ -48,4 +63,14 @@ class AppBottomNavigation extends Component {
   }
 }
 
-export default AppBottomNavigation;
+const mapStateToProps = (state) => ({});
+
+const mapDispatchToProps = dispatch => {
+    return {
+        filter: (type) => {
+            dispatch(filter(type));
+        }
+    }
+  }
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppBottomNavigation);

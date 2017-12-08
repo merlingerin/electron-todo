@@ -11,30 +11,35 @@ import Timer from '../Timer/Timer';
 
 <i class="material-icons">play_circle_filled</i>
 const iconButtonElement = (
-    <IconButton
-        touch={true}
-        tooltip="more"
-        tooltipPosition="bottom-left"
-        >
+    <IconButton>
         <MoreVertIcon color={grey400} />
     </IconButton>
-);
-  
-const rightIconMenu = (
-    <IconMenu iconButtonElement={iconButtonElement}>
-        <MenuItem>Start</MenuItem>
-        <MenuItem>Stop</MenuItem>
-        <MenuItem>Delete</MenuItem>
-    </IconMenu>
 );
 
 const TodoItem = (props) => {
     let completed =  props.completed ? 'completed' : '';
-    console.log(props);
+    let renderTimer = () => {
+        if(props.timerActived) {
+            if(props.active === props.timerActived) {
+                return <Timer {...props} />;
+            } else {
+                return <Timer type={'hidden'} {...props} />;
+            };
+        } else {
+            return <Timer {...props} />
+        }
+    }
+
+    const rightIconMenu = (
+        <IconMenu menuStyle={{minWidth: 150}}  iconButtonElement={iconButtonElement}>
+            {props.completed ? <MenuItem onClick={() => {props.onToggleTodo(props.id)}}>Uncompleted</MenuItem> : <MenuItem onClick={() => {props.onToggleTodo(props.id)}}>Completed</MenuItem>}
+            <MenuItem>Delete</MenuItem>
+        </IconMenu>
+    );
     return (
         <ListItem
             className={`todo__item ${completed}`}
-            leftAvatar={<Timer {...props} />}
+            leftAvatar={renderTimer()}
             rightIconButton={rightIconMenu}
             primaryText={props.title}
             secondaryText={

@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {taimerActivated} from '../../actions/index';
+import {taimerActivated, startTodo} from '../../actions/index';
 
 import PlayCircleFilled from 'material-ui/svg-icons/av/play-circle-filled';
 import PauseCircleFilled from 'material-ui/svg-icons/av/pause-circle-filled';
@@ -15,18 +15,16 @@ const controlsStyle = {
         width: "24px",
         height: "24px"
     },
-    smallIcon: {
-        width: 24,
-        height: 24,
-    },
-    small: {
-        width: 24,
-        height: 24,
-        padding: 0,
-    },
     timer: {
         verticalAlign: "super",
         marginRight: "0.5rem"
+    },
+    timerControlls: {
+        position: "absolute",
+        left: 0,
+        top: 0,
+        paddingTop: "16px",
+        paddingLeft: "16px"
     }
 }
 
@@ -41,19 +39,19 @@ class Timer extends React.Component {
 
     _handleClickPlay = () => {
         let that = this;
-        this.timerId = setInterval(() => {
-            this.setState((prevState) => {
-                return {time: prevState.time++}
-            })
-        }, 1000);
-        this.props.onTimerActivated();
+        if(!this.props.active) {
+            this.timerId = setInterval(() => {
+                this.setState({time: ++that.state.time});
+            }, 1000);
+            this.props.onTimerActivated(this.props.id);
+        }
     }
 
     _handleClickPause = () => {
         if(this.timerId) {
             clearInterval(this.timerId);
         }
-        this.props.onTimerActivated();        
+        this.props.onTimerActivated(this.props.id);        
     }
 
     parseTime() {
@@ -67,28 +65,27 @@ class Timer extends React.Component {
     }
 
     render() {
+        let shown = this.props.timerActived === this.props.active;
+        const playButton = (
+            <IconButton 
+                onClick={this._handleClickPlay}
+            >
+                <PlayCircleFilled />
+            </IconButton>
+        );
+        const pauseButton = (
+            <IconButton 
+                onClick={this._handleClickPause}
+            >
+                <PauseCircleFilled />
+            </IconButton>
+        )
         const controlls = (
             <div 
                 className="timer__controlls"
-                style={{
-                    position: "absolute",
-                    left: 0
-                }}
+                style={controlsStyle.timerControlls}
             >
-                <IconButton 
-                    onClick={this._handleClickPlay}
-                    style={controlsStyle.small} 
-                    iconStyle={controlsStyle.smallIcon}
-                >
-                    <PlayCircleFilled />
-                </IconButton>
-                <IconButton 
-                    onClick={this._handleClickPause}
-                    style={controlsStyle.small} 
-                    iconStyle={controlsStyle.smallIcon}
-                >
-                    <PauseCircleFilled />
-                </IconButton>
+                {this.props.active ? pauseButton : playButton}
             </div>
         )
         return (
@@ -100,7 +97,7 @@ class Timer extends React.Component {
                     {this.parseTime()}
                 </span>
                 {
-                    this.props.completed ? '' : controlls
+                    this.props.completed || !shown ? '' : controlls
                 }
             </div>
         )
@@ -111,9 +108,10 @@ const mapStateToProps = (state) => ({});
 
 const mapDispatchToProps = dispatch => {
     return {
-        onTimerActivated: () => {
-            dispatch(taimerActivated())
-        }  
+        onTimerActivated: (id) => {
+            dispatch(taimerActivated());
+            dispatch(startTodo(id));
+        }
     }
   }
 
