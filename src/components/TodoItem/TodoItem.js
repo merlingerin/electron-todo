@@ -30,6 +30,7 @@ const rightIconMenu = (
 
 const TodoItem = (props) => {
     let completed =  props.completed ? 'completed' : '';
+    console.log(props);
     return (
         <ListItem
             className={`todo__item ${completed}`}

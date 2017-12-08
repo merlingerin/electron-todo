@@ -1,8 +1,16 @@
 let initialState = {
-    taskActive: false,
+    timerActived: false,
     valueOfTasks: 1
 };
 
 export default (state = initialState || {}, action) => {
-    return state;
+    switch(action.type) {
+        case 'TAIMER_ACTIVATED':
+            return {
+                ...state,
+                timerActived: !state.timerActived
+            }
+        default:
+            return state;        
+    }
 }

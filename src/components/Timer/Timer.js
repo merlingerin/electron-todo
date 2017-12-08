@@ -1,8 +1,10 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import {taimerActivated} from '../../actions/index';
+
 import PlayCircleFilled from 'material-ui/svg-icons/av/play-circle-filled';
 import PauseCircleFilled from 'material-ui/svg-icons/av/pause-circle-filled';
 import IconButton from 'material-ui/IconButton';
-import Moment from 'react-moment';
 
 const controlsStyle = {
     buttonPlay: {
@@ -36,13 +38,34 @@ class Timer extends React.Component {
             time: props.spendTime
         }
     }
+
     _handleClickPlay = () => {
-        console.log('_handleClick Play');
+        let that = this;
+        this.timerId = setInterval(() => {
+            this.setState((prevState) => {
+                return {time: prevState.time++}
+            })
+        }, 1000);
+        this.props.onTimerActivated();
     }
 
     _handleClickPause = () => {
-        console.log('_handleClick Pause');
+        if(this.timerId) {
+            clearInterval(this.timerId);
+        }
+        this.props.onTimerActivated();        
     }
+
+    parseTime() {
+        let time = this.state.time;
+        let days = parseInt(time / 86400, 10) < 10 ? '0' + parseInt(time / 86400, 10) : parseInt(time / 86400, 10);
+        let hours = parseInt(time % 86400 / 3600, 10) < 10 ? '0' + parseInt(time % 86400 / 3600, 10) : parseInt(time % 86400 / 3600, 10);
+        let minutes = parseInt(time % 86400 % 3600 / 60, 10) < 10 ? '0' + parseInt(time % 86400 % 3600 / 60, 10) : parseInt(time % 86400 % 3600 / 60, 10);
+        let seconds = parseInt(time % 86400 % 3600 % 60, 10) < 10 ? '0' + parseInt(time % 86400 % 3600 % 60, 10) : parseInt(time % 86400 % 3600 % 60, 10);
+
+        return hours + ':' + minutes + ':' + seconds;
+    }
+
     render() {
         const controlls = (
             <div 
@@ -68,16 +91,13 @@ class Timer extends React.Component {
                 </IconButton>
             </div>
         )
-        let time = this.state.time;
         return (
             <div className="timer">
                 <span 
                     className="timer__time"
                     style={controlsStyle.timer}
                 >
-                    <Moment format="hh:mm:ss">
-                        {time - 20000000000}                        
-                    </Moment>
+                    {this.parseTime()}
                 </span>
                 {
                     this.props.completed ? '' : controlls
@@ -87,4 +107,14 @@ class Timer extends React.Component {
     }
 }
 
-export default Timer;
+const mapStateToProps = (state) => ({});
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onTimerActivated: () => {
+            dispatch(taimerActivated())
+        }  
+    }
+  }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Timer);

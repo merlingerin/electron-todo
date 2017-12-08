@@ -13,7 +13,9 @@ const TodoList = (props) => {
                 { props.todos.length > 0 ? 
                     props.todos.map((item) => (
                         <TodoItem 
-                            key={item.id} {...item} 
+                            key={item.id} 
+                            {...item}
+                            {...props.onTimerActivated}
                         />
                     ))  :
                     'No Todos.'

@@ -53,11 +53,11 @@ class TodoInput extends React.Component {
         });
     }
 
-    _handleSubmit() {
+    async _handleSubmit() {
         if(this.state.todo.title !== '' && this.state.todo.description !== '') {
-            this.props.onTodoAdd(this.state.todo);
+            await this.props.onTodoAdd(this.state.todo);
             this.setState((prevState) => {
-                return {todo: {...prevState.todo, title: '', description: ''}}
+                return {todo: {...prevState.todo, id: this.props.todos.length, title: '', description: ''}}
             });
         } else {
             this.setState({errorText: true});

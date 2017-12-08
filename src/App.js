@@ -6,15 +6,16 @@ import Layer from 'layers/layer';
 import AppHeader from 'components/AppHeader/AppHeader';
 import AppBottomNavigation from 'components/AppBottomNavigation/AppBottomNavigation';
 import TodoList from './components/TodoList/TodoList';
+import {taimerActivated} from './actions/index';
 
 class App extends Component {
+
   render() {
-    console.log(this.props);
     return (
       <div className="App">
         <Layer>
           <AppHeader />
-          <TodoList todos={this.props.todos} />
+          <TodoList {...this.props} />
           <AppBottomNavigation />
         </Layer>
       </div>
@@ -24,7 +25,16 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    todos: state.todos
+    todos: state.todos,
+    appState: state.appState
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+      onTimerActivated: () => {
+          dispatch(taimerActivated())
+      }  
   }
 }
 
